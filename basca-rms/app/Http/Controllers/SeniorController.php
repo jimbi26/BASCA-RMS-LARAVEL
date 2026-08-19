@@ -43,24 +43,12 @@ class SeniorController
     // DISPLAY ALL SENIOR CITIZENS
     public function seniors()
     {
-        try {
-            $seniors = SeniorCitizen::latest('created_at')->get();
-
-            return response()->json([
-                'success' => true,
-                'count' => $seniors->count(),
-                'message' => 'Database query works'
-            ]);
-
-        } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'error' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ], 500);
-        }
+        // Fetch all senior records ordered by newest first
+        $seniors = SeniorCitizen::latest('created_at')->get();
+        // In your Controller
+        return view('senior-records', compact('seniors'));
     }
+
     // SHOW ADD SENIOR PAGE
     public function create()
     {
