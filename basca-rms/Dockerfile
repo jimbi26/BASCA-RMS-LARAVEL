@@ -80,4 +80,4 @@ RUN docker-php-ext-enable opcache
 
 EXPOSE 10000
 
-CMD ["sh", "-c", "cp /etc/secrets/.env /var/www/html/.env && php artisan serve --host=0.0.0.0 --port=${PORT}"]
+CMD ["sh", "-c", "cp /etc/secrets/.env /var/www/html/.env && php artisan optimize:clear && php artisan serve --host=0.0.0.0 --port=${PORT}"]
