@@ -4,31 +4,58 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SeniorController;
 use App\Http\Controllers\AuthController;
 
+/*
+|--------------------------------------------------------------------------
+| Home
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-//Senior Records
+
+/*
+|--------------------------------------------------------------------------
+| Dashboard
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/dashboard', [SeniorController::class, 'index'])
     ->name('dashboard');
 
-// Senior Records & Search
+
+/*
+|--------------------------------------------------------------------------
+| Senior Records
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/seniors', [SeniorController::class, 'seniors'])
     ->name('seniors.senior-records');
 
 
-// Authentication //Login
+/*
+|--------------------------------------------------------------------------
+| Authentication
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/login', function () {
     return view('welcome');
 })->name('login');
 
 Route::post('/login', [AuthController::class, 'login']);
 
-// Logout
 Route::post('/logout', [AuthController::class, 'logout']);
 
 
-// CREATE AND ADD SENIOR
+/*
+|--------------------------------------------------------------------------
+| Create Senior
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/add-senior', function () {
     return view('components.add-senior');
 })->name('seniors.create');
@@ -36,22 +63,52 @@ Route::get('/add-senior', function () {
 Route::post('/senior', [SeniorController::class, 'store'])
     ->name('seniors.store');
 
-//SEARCH GLOBALLY
+
+/*
+|--------------------------------------------------------------------------
+| Global Senior Search
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/senior-records/search', [SeniorController::class, 'search'])
     ->name('seniors.search');
 
-// VIEW SENIOR
+
+/*
+|--------------------------------------------------------------------------
+| View Senior
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/senior/{senior_id}', [SeniorController::class, 'show'])
     ->name('seniors.show');
 
-// EDIT SENIOR
+
+/*
+|--------------------------------------------------------------------------
+| Edit Senior
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/senior/{senior_id}/edit', [SeniorController::class, 'edit'])
     ->name('seniors.edit');
 
-// UPDATE SENIOR
+
+/*
+|--------------------------------------------------------------------------
+| Update Senior
+|--------------------------------------------------------------------------
+*/
+
 Route::put('/senior/{senior_id}', [SeniorController::class, 'update'])
     ->name('seniors.update');
 
-// DELETE SPECIFIC SENIOR
-Route::delete('/senior/{id}', [SeniorController::class, 'destroy'])
+
+/*
+|--------------------------------------------------------------------------
+| Delete Senior
+|--------------------------------------------------------------------------
+*/
+
+Route::delete('/senior/{senior_id}', [SeniorController::class, 'destroy'])
     ->name('seniors.destroy');
