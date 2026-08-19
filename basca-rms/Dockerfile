@@ -58,6 +58,9 @@ RUN composer install \
     --prefer-dist \
     --optimize-autoloader
 
+RUN mkdir -p storage/app/public
+RUN php artisan storage:link
+
 # Copy Vite/Tailwind production assets
 COPY --from=frontend /var/www/html/public/build /var/www/html/public/build
 
