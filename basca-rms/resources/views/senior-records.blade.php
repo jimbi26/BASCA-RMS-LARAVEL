@@ -10,7 +10,7 @@
 
 <body class="bg-slate-100 text-slate-800 antialiased font-sans">
     <div class="flex min-h-screen">
-        <x-sidebar />
+        @include('components.sidebar')
 
         <main class="w-full flex-1 space-y-6 p-4 pt-24 sm:p-6 lg:ml-[360px] lg:p-8">
 
@@ -222,7 +222,7 @@
                     </div>
                 @endif
             </div>
-            <x-developer-modal />
+            @include('components.developer-modal')
         </main>
     </div>
     <!-- Include your Delete Modal Component Here -->
