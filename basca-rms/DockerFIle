@@ -60,6 +60,6 @@ RUN chmod -R 775 \
 # Enable PHP OPcache
 RUN docker-php-ext-enable opcache
 
-EXPOSE 9000
+EXPOSE 10000
 
-CMD ["php-fpm", "-F"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]
