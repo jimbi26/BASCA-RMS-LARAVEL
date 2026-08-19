@@ -18,7 +18,7 @@
     <div class="flex min-h-screen">
 
         {{-- SIDEBAR --}}
-        @includeIf('components.sidebar')
+        <!-- @includeIf('components.sidebar') -->
 
         <main class="w-full flex-1 space-y-6 p-4 pt-24 sm:p-6 lg:ml-[360px] lg:p-8">
 
@@ -462,7 +462,7 @@
 
 
             <!-- DEVELOPER MODAL -->
-            @includeIf('components.developer-modal')
+            <!-- @includeIf('components.developer-modal') -->
 
         </main>
 
@@ -470,7 +470,7 @@
 
 
     <!-- DELETE MODAL -->
-    @includeIf('components.confirm-delete-modal')
+    <!-- @includeIf('components.confirm-delete-modal') -->
 
 
     <!-- ========================================================= -->
