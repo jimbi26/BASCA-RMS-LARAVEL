@@ -62,4 +62,5 @@ RUN docker-php-ext-enable opcache
 
 EXPOSE 10000
 
+# Start Laravel HTTP server
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]
