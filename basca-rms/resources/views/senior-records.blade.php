@@ -4,26 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite([
-        'resources/css/app.css',
-        'resources/js/app.js',
-        'resources/js/senior-record.js'
-    ])
-
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/senior-record.js'])
     <title>BASCA-RMS - Senior Citizen Directory</title>
 </head>
 
 <body class="bg-slate-100 text-slate-800 antialiased font-sans">
-
     <div class="flex min-h-screen">
-
-        {{-- SIDEBAR --}}
-        <!-- @includeIf('components.sidebar') -->
+        <x-sidebar />
 
         <main class="w-full flex-1 space-y-6 p-4 pt-24 sm:p-6 lg:ml-[360px] lg:p-8">
 
             @php
-                $btnAction = 'inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-600 transition-all hover:scale-105 active:scale-95 text-base shadow-xs';
+                $btnAction = "inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-600 transition-all hover:scale-105 active:scale-95 text-base shadow-xs";
             @endphp
 
             <!-- CONTAINER CARD -->
@@ -32,777 +24,209 @@
                 <!-- TOOLBAR -->
                 <div
                     class="flex flex-col gap-4 border-b border-slate-200 bg-white p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
-
                     <div>
                         <h1 class="font-serif text-3xl font-extrabold text-slate-900 sm:text-4xl tracking-tight">
                             Senior Citizen Records
                         </h1>
-
                         <p class="mt-1 text-base font-medium text-slate-500">
                             Manage, filter, and review registered senior citizen profiles
                         </p>
                     </div>
 
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-
-                        <!-- SEARCH -->
                         <div class="relative w-full sm:w-96">
-
                             <i
-                                class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-xl text-slate-400">
-                            </i>
-
+                                class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-xl text-slate-400"></i>
                             <input type="text" id="client-search" placeholder="Search by name, ID, or RRN..."
                                 class="w-full rounded-xl border border-slate-300 bg-slate-50 pl-12 pr-4 py-3.5 text-lg text-slate-900 font-medium placeholder:text-slate-400 focus:border-[#14294D] focus:bg-white focus:ring-2 focus:ring-[#14294D]/20 focus:outline-none transition-all shadow-inner" />
-
                         </div>
 
-                        <!-- ADD SENIOR -->
                         <a href="{{ route('seniors.create') }}"
                             class="inline-flex items-center gap-2.5 rounded-xl bg-[#14294D] px-6 py-3.5 text-lg font-bold text-white transition hover:bg-[#1b345f] shadow-sm">
-                            <i class="fa-solid fa-user-plus text-lg"></i>
-                            Add Senior Citizen
+                            <i class="fa-solid fa-user-plus text-lg"></i> Add Senior Citizen
                         </a>
-
                     </div>
                 </div>
 
-
-                {{-- NO DATABASE RECORDS --}}
-                @if ($seniors->isEmpty())
-
+                @if($seniors->isEmpty())
                     <div class="flex flex-col items-center justify-center p-16 text-center">
-
                         <div
                             class="flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 text-slate-400 border border-slate-200">
                             <i class="fa-solid fa-folder-open text-3xl"></i>
                         </div>
-
-                        <p class="mt-4 text-xl font-bold text-slate-800">
-                            No senior citizen records found
-                        </p>
-
-                        <p class="mt-1 text-base text-slate-500 max-w-sm">
-                            Register a new senior record to get started.
-                        </p>
-
+                        <p class="mt-4 text-xl font-bold text-slate-800">No senior citizen records found</p>
+                        <p class="mt-1 text-base text-slate-500 max-w-sm">Register a new senior record to get started.</p>
                     </div>
-
                 @else
-
-                    <!-- NO SEARCH MATCH -->
                     <div id="no-match-message" class="hidden flex-col items-center justify-center px-4 py-16 text-center">
-
                         <div
                             class="flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 text-slate-500 ring-8 ring-slate-50 border border-slate-200/80 shadow-xs">
                             <i class="fa-solid fa-magnifying-glass text-3xl"></i>
                         </div>
-
-                        <h3 class="mt-5 text-2xl font-bold tracking-tight text-slate-900">
-                            No matching records found
-                        </h3>
-
-                        <p class="mt-2 max-w-sm text-base leading-relaxed text-slate-500">
-                            Try searching with a different name, ID, or RRN.
-                        </p>
-
+                        <h3 class="mt-5 text-2xl font-bold tracking-tight text-slate-900">No matching records found</h3>
+                        <p class="mt-2 max-w-sm text-base leading-relaxed text-slate-500">Try searching with a different
+                            name, ID, or RRN.</p>
                     </div>
 
-
                     <div id="records-container">
-
-                        <!-- ================================================= -->
                         <!-- DESKTOP TABLE -->
-                        <!-- ================================================= -->
-
                         <div class="hidden overflow-x-auto md:block">
-
                             <table class="w-full text-left border-collapse" id="desktop-table">
-
                                 <thead
                                     class="border-b border-slate-200 bg-slate-100/90 text-sm font-bold uppercase tracking-wider text-slate-700 select-none">
-
                                     <tr>
-
-                                        <th class="px-6 py-4.5 text-sm">
-                                            <i class="fa-solid fa-hashtag mr-1.5 text-slate-500 text-sm"></i>
-                                            Senior ID
+                                        <th class="px-6 py-4.5 text-sm"><i
+                                                class="fa-solid fa-hashtag mr-1.5 text-slate-500 text-sm"></i> Senior ID
                                         </th>
-
-                                        <th class="px-6 py-4.5 text-sm">
-                                            <i class="fa-solid fa-user mr-1.5 text-slate-500 text-sm"></i>
-                                            Full Name
+                                        <th class="px-6 py-4.5 text-sm"><i
+                                                class="fa-solid fa-user mr-1.5 text-slate-500 text-sm"></i> Full Name</th>
+                                        <th class="px-6 py-4.5 text-center text-sm"><i
+                                                class="fa-solid fa-cake-candles mr-1.5 text-slate-500 text-sm"></i> Age</th>
+                                        <th class="px-6 py-4.5 text-sm"><i
+                                                class="fa-solid fa-venus-mars mr-1.5 text-slate-500 text-sm"></i> Sex</th>
+                                        <th class="px-6 py-4.5 text-sm"><i
+                                                class="fa-solid fa-id-card mr-1.5 text-slate-500 text-sm"></i> RRN</th>
+                                        <th class="px-6 py-4.5 text-sm"><i
+                                                class="fa-solid fa-location-dot mr-1.5 text-slate-500 text-sm"></i> Barangay
                                         </th>
-
-                                        <th class="px-6 py-4.5 text-center text-sm">
-                                            <i class="fa-solid fa-cake-candles mr-1.5 text-slate-500 text-sm"></i>
-                                            Age
-                                        </th>
-
-                                        <th class="px-6 py-4.5 text-sm">
-                                            <i class="fa-solid fa-venus-mars mr-1.5 text-slate-500 text-sm"></i>
-                                            Sex
-                                        </th>
-
-                                        <th class="px-6 py-4.5 text-sm">
-                                            <i class="fa-solid fa-id-card mr-1.5 text-slate-500 text-sm"></i>
-                                            RRN
-                                        </th>
-
-                                        <th class="px-6 py-4.5 text-sm">
-                                            <i class="fa-solid fa-location-dot mr-1.5 text-slate-500 text-sm"></i>
-                                            Barangay
-                                        </th>
-
-                                        <th class="px-6 py-4.5 text-right text-sm">
-                                            Actions
-                                        </th>
-
+                                        <th class="px-6 py-4.5 text-right text-sm">Actions</th>
                                     </tr>
-
                                 </thead>
-
-
                                 <tbody class="divide-y divide-slate-200 text-slate-800">
-
                                     @foreach ($seniors as $senior)
-
-                                        @php
-                                            $firstName = $senior->first_name ?? '';
-                                            $middleName = $senior->middle_name ?? '';
-                                            $lastName = $senior->last_name ?? '';
-                                            $sex = $senior->sex ?? '';
-                                            $rrn = $senior->rrn ?? 'N/A';
-                                            $age = $senior->age ?? 'N/A';
-                                            $barangay = $senior->barangay ?? 'N/A';
-
-                                            $isMale = strtolower(trim($sex)) === 'male';
-
-                                            $initials =
-                                                substr($firstName, 0, 1) .
-                                                substr($lastName, 0, 1);
-
-                                            $fullName = trim(
-                                                $firstName . ' ' .
-                                                $middleName . ' ' .
-                                                $lastName
-                                            );
-                                        @endphp
-
+                                        @php $isMale = strtolower($senior->sex) === 'male'; @endphp
                                         <tr class="senior-item transition-colors hover:bg-amber-50/40">
-
-                                            <!-- SENIOR ID -->
                                             <td class="px-6 py-5 whitespace-nowrap">
-
                                                 <span
                                                     class="inline-flex items-center gap-1.5 font-mono text-base font-bold text-slate-800 bg-slate-100 px-3.5 py-2 rounded-lg border border-slate-300 shadow-2xs">
-                                                    <i class="fa-solid fa-hashtag text-xs text-slate-400"></i>
-
-                                                    {{ $senior->senior_id }}
+                                                    <i
+                                                        class="fa-solid fa-hashtag text-xs text-slate-400"></i>{{ $senior->senior_id }}
                                                 </span>
-
                                             </td>
-
-
-                                            <!-- FULL NAME -->
                                             <td class="px-6 py-5 whitespace-nowrap">
-
                                                 <div class="flex items-center gap-4">
-
                                                     <div
                                                         class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#14294D] text-sm font-extrabold text-[#C69A2E] shadow-xs">
-                                                        {{ $initials }}
+                                                        {{ substr($senior->first_name, 0, 1) }}{{ substr($senior->last_name, 0, 1) }}
                                                     </div>
-
                                                     <div class="flex flex-col">
-
                                                         <span
                                                             class="font-bold uppercase text-slate-900 text-lg tracking-wide searchable-name">
-                                                            {{ $fullName }}
+                                                            {{ $senior->first_name }} {{ $senior->middle_name }}
+                                                            {{ $senior->last_name }}
                                                         </span>
-
                                                     </div>
-
                                                 </div>
-
                                             </td>
-
-
-                                            <!-- AGE -->
                                             <td class="px-6 py-5 text-center whitespace-nowrap">
-
-                                                <span class="text-xl font-bold text-slate-900">
-                                                    {{ $age }}
-                                                </span>
-
-                                                <span class="text-sm font-medium text-slate-500">
-                                                    yrs
-                                                </span>
-
+                                                <span class="text-xl font-bold text-slate-900">{{ $senior->age }}</span><span
+                                                    class="text-sm font-medium text-slate-500"> yrs</span>
                                             </td>
-
-
-                                            <!-- SEX -->
                                             <td class="px-6 py-5 whitespace-nowrap">
-
                                                 <span
                                                     class="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-bold uppercase tracking-wider {{ $isMale ? 'bg-blue-100 text-blue-800 border border-blue-200' : 'bg-pink-100 text-pink-800 border border-pink-200' }}">
-
                                                     <i
-                                                        class="fa-solid {{ $isMale ? 'fa-mars text-blue-600' : 'fa-venus text-pink-600' }} text-sm"></i>
-
-                                                    {{ $sex ?: 'N/A' }}
-
+                                                        class="fa-solid {{ $isMale ? 'fa-mars text-blue-600' : 'fa-venus text-pink-600' }} text-sm"></i>{{ $senior->sex }}
                                                 </span>
-
                                             </td>
-
-
-                                            <!-- RRN -->
                                             <td class="px-6 py-5 whitespace-nowrap">
-
                                                 <span
                                                     class="inline-flex items-center gap-1.5 font-mono text-base font-semibold text-slate-800 bg-slate-100 px-3.5 py-2 rounded-lg border border-slate-300 shadow-2xs searchable-rrn">
-                                                    {{ $rrn }}
+                                                    {{ $senior->rrn ?? 'N/A' }}
                                                 </span>
-
                                             </td>
-
-
-                                            <!-- BARANGAY -->
                                             <td class="px-6 py-5 whitespace-nowrap text-lg font-semibold text-slate-700">
-                                                {{ $barangay }}
+                                                {{ $senior->barangay }}
                                             </td>
-
-
-                                            <!-- ACTIONS -->
                                             <td class="px-6 py-5 text-right whitespace-nowrap">
-
                                                 <div class="flex justify-end gap-2">
-
-                                                    <!-- VIEW -->
-                                                    <a hhref="{{ route('seniors.show', ['senior_id' => $senior->senior_id]) }}"
+                                                    <a href="{{ route('seniors.show', $senior->senior_id) }}"
                                                         class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-600 transition-all hover:border-[#14294D] hover:bg-[#14294D] hover:text-white hover:shadow-sm"
                                                         title="View Profile">
                                                         <i class="fa-solid fa-eye text-base"></i>
                                                     </a>
-
-
-                                                    <!-- DELETE -->
                                                     <button type="button"
-                                                        onclick="openDeleteModal('{{ route('seniors.destroy', ['senior_id' => $senior->senior_id]) }}')"
+                                                        onclick="openDeleteModal('{{ route('seniors.destroy', $senior->senior_id) }}')"
                                                         class="{{ $btnAction }} h-8 w-8 text-xs hover:bg-red-600 hover:text-white"
                                                         title="Delete">
                                                         <i class="fa-solid fa-trash-can"></i>
                                                     </button>
-
                                                 </div>
-
                                             </td>
-
                                         </tr>
-
                                     @endforeach
-
                                 </tbody>
-
                             </table>
-
                         </div>
 
-
-                        <!-- ================================================= -->
-                        <!-- MOBILE CARD LIST -->
-                        <!-- ================================================= -->
-
+                        <!-- MOBILE CARD LIST (below md) - UPDATED TO USE MODAL -->
                         <div class="divide-y divide-slate-200 md:hidden" id="mobile-list">
-
                             @foreach ($seniors as $senior)
-
-                                @php
-                                    $firstName = $senior->first_name ?? '';
-                                    $lastName = $senior->last_name ?? '';
-                                    $sex = $senior->sex ?? '';
-                                    $rrn = $senior->rrn ?? 'N/A';
-                                    $age = $senior->age ?? 'N/A';
-                                    $barangay = $senior->barangay ?? 'N/A';
-
-                                    $isMale = strtolower(trim($sex)) === 'male';
-
-                                    $initials =
-                                        substr($firstName, 0, 1) .
-                                        substr($lastName, 0, 1);
-                                @endphp
-
+                                @php $isMale = strtolower($senior->sex) === 'male'; @endphp
                                 <div class="senior-item flex flex-col gap-4 p-5 bg-white hover:bg-slate-50/50">
-
                                     <div class="flex items-start justify-between gap-3">
-
                                         <div class="flex items-center gap-3.5 min-w-0">
-
                                             <div
                                                 class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#14294D] text-sm font-extrabold text-[#C69A2E]">
-                                                {{ $initials }}
+                                                {{ substr($senior->first_name, 0, 1) }}{{ substr($senior->last_name, 0, 1) }}
                                             </div>
-
-
                                             <div class="min-w-0">
-
                                                 <h3
                                                     class="truncate font-bold uppercase text-slate-900 text-base tracking-wide searchable-name">
-                                                    {{ $firstName }} {{ $lastName }}
+                                                    {{ $senior->first_name }} {{ $senior->last_name }}
                                                 </h3>
-
                                                 <div class="flex items-center gap-2 mt-0.5">
-
                                                     <span
-                                                        class="font-mono text-xs font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
-                                                        #{{ $senior->senior_id }}
-                                                    </span>
-
+                                                        class="font-mono text-xs font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">#{{ $senior->senior_id }}</span>
                                                     <span
-                                                        class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold {{ $isMale ? 'bg-blue-100 text-blue-800' : 'bg-pink-100 text-pink-800' }}">
-                                                        {{ $sex ?: 'N/A' }}
-                                                    </span>
-
+                                                        class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold {{ $isMale ? 'bg-blue-100 text-blue-800' : 'bg-pink-100 text-pink-800' }}">{{ $senior->sex }}</span>
                                                 </div>
-
                                             </div>
-
                                         </div>
-
-
-                                        <!-- MOBILE ACTIONS -->
                                         <div class="flex items-center shrink-0 gap-1.5">
+                                            <a href="{{ route('seniors.show', $senior->senior_id) }}"
+                                                class="{{ $btnAction }} h-9 w-9 text-sm hover:bg-[#14294D] hover:text-white"><i
+                                                    class="fa-solid fa-eye"></i></a>
 
-                                            <a href="{{ route('seniors.show', ['senior_id' => $senior->senior_id]) }}"
-                                                class="{{ $btnAction }} h-9 w-9 text-sm hover:bg-[#14294D] hover:text-white"
-                                                title="View Profile">
-                                                <i class="fa-solid fa-eye"></i>
-                                            </a>
-
-
+                                            <!-- FIXED: Replaced standard form submit with openDeleteModal call -->
                                             <button type="button"
-                                                onclick="openDeleteModal('{{ route('seniors.destroy', ['senior_id' => $senior->senior_id]) }}')"
+                                                onclick="openDeleteModal('{{ route('seniors.destroy', $senior->senior_id) }}')"
                                                 class="{{ $btnAction }} h-9 w-9 text-sm hover:bg-red-600 hover:text-white"
                                                 title="Delete">
                                                 <i class="fa-solid fa-trash-can"></i>
                                             </button>
-
                                         </div>
-
                                     </div>
-
-
-                                    <!-- MOBILE DETAILS -->
                                     <div
                                         class="grid grid-cols-3 gap-2 rounded-xl bg-slate-50 p-3 text-xs font-medium border border-slate-200/80 text-slate-600">
-
-                                        <div>
-
-                                            <span class="block text-slate-400 font-semibold uppercase text-[10px]">
-                                                Age
-                                            </span>
-
-                                            <span class="font-bold text-slate-900 text-sm">
-                                                {{ $age }} yrs
-                                            </span>
-
+                                        <div><span
+                                                class="block text-slate-400 font-semibold uppercase text-[10px]">Age</span><span
+                                                class="font-bold text-slate-900 text-sm">{{ $senior->age }} yrs</span></div>
+                                        <div><span
+                                                class="block text-slate-400 font-semibold uppercase text-[10px]">RRN</span><span
+                                                class="font-mono font-bold text-slate-800 text-xs truncate block searchable-rrn">{{ $senior->rrn ?? 'N/A' }}</span>
                                         </div>
-
-
-                                        <div>
-
-                                            <span class="block text-slate-400 font-semibold uppercase text-[10px]">
-                                                RRN
-                                            </span>
-
-                                            <span
-                                                class="font-mono font-bold text-slate-800 text-xs truncate block searchable-rrn">
-                                                {{ $rrn }}
-                                            </span>
-
+                                        <div><span
+                                                class="block text-slate-400 font-semibold uppercase text-[10px]">Barangay</span><span
+                                                class="font-bold text-slate-800 text-xs truncate block">{{ $senior->barangay }}</span>
                                         </div>
-
-
-                                        <div>
-
-                                            <span class="block text-slate-400 font-semibold uppercase text-[10px]">
-                                                Barangay
-                                            </span>
-
-                                            <span class="font-bold text-slate-800 text-xs truncate block">
-                                                {{ $barangay }}
-                                            </span>
-
-                                        </div>
-
                                     </div>
-
                                 </div>
-
                             @endforeach
-
                         </div>
-
                     </div>
 
-
-                    <!-- ================================================= -->
-                    <!-- PAGINATION -->
-                    <!-- ================================================= -->
-
+                    <!-- JS PAGINATION CONTAINER -->
                     <div id="js-pagination"
                         class="border-t border-slate-200 bg-slate-50 px-6 py-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                     </div>
-
                 @endif
-
             </div>
-
-
-            <!-- DEVELOPER MODAL -->
-            <!-- @includeIf('components.developer-modal') -->
-
+            <x-developer-modal />
         </main>
-
     </div>
-
-
-    <!-- DELETE MODAL -->
-    <!-- @includeIf('components.confirm-delete-modal') -->
-
-
-    <!-- ========================================================= -->
-    <!-- SEARCH + PAGINATION -->
-    <!-- ========================================================= -->
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-            const itemsPerPage = 10;
-
-            let currentPage = 1;
-            let filtered = [];
-
-
-            const desktopTable = document.getElementById('desktop-table');
-            const mobileList = document.getElementById('mobile-list');
-
-            const desktopItems = desktopTable
-                ? desktopTable.querySelectorAll('tbody tr.senior-item')
-                : [];
-
-            const mobileItems = mobileList
-                ? mobileList.querySelectorAll('.senior-item')
-                : [];
-
-
-            const searchInput = document.getElementById('client-search');
-            const noMatchMsg = document.getElementById('no-match-message');
-            const recordsContainer = document.getElementById('records-container');
-            const paginationContainer = document.getElementById('js-pagination');
-
-
-            /*
-             * Keep delete modal available globally.
-             * Your existing confirm-delete-modal component
-             * can continue using this function.
-             */
-            if (typeof window.openDeleteModal !== 'function') {
-                window.openDeleteModal = function (url) {
-                    console.error('openDeleteModal() is not available.');
-                    console.error('Delete URL:', url);
-                };
-            }
-
-
-            /*
-             * CHANGE PAGE
-             */
-            window.changePage = function (page) {
-
-                const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
-
-                if (page < 1) {
-                    page = 1;
-                }
-
-                if (page > totalPages) {
-                    page = totalPages;
-                }
-
-                currentPage = page;
-
-                renderView();
-            };
-
-
-            /*
-             * RENDER TABLE / MOBILE LIST
-             */
-            function renderView() {
-
-                const total = filtered.length;
-
-                const pages = Math.ceil(total / itemsPerPage) || 1;
-
-                const start = (currentPage - 1) * itemsPerPage;
-
-                const pageIndices = filtered.slice(
-                    start,
-                    start + itemsPerPage
-                );
-
-
-                /*
-                 * DESKTOP
-                 */
-                desktopItems.forEach(function (element, index) {
-
-                    const visible = pageIndices.includes(index);
-
-                    element.style.display = visible ? '' : 'none';
-
-                });
-
-
-                /*
-                 * MOBILE
-                 */
-                mobileItems.forEach(function (element, index) {
-
-                    const visible = pageIndices.includes(index);
-
-                    element.style.display = visible ? '' : 'none';
-
-                });
-
-
-                /*
-                 * NO RESULTS
-                 */
-                if (noMatchMsg) {
-
-                    noMatchMsg.classList.toggle(
-                        'hidden',
-                        total > 0
-                    );
-
-                    noMatchMsg.classList.toggle(
-                        'flex',
-                        total === 0
-                    );
-
-                }
-
-
-                if (recordsContainer) {
-
-                    recordsContainer.classList.toggle(
-                        'hidden',
-                        total === 0
-                    );
-
-                }
-
-
-                if (paginationContainer) {
-
-                    paginationContainer.classList.toggle(
-                        'hidden',
-                        total === 0
-                    );
-
-                }
-
-
-                if (total === 0) {
-
-                    if (paginationContainer) {
-                        paginationContainer.innerHTML = '';
-                    }
-
-                    return;
-                }
-
-
-                const end = Math.min(
-                    currentPage * itemsPerPage,
-                    total
-                );
-
-
-                let html = `
-                    <span class="text-sm font-medium text-slate-500 order-2 sm:order-1">
-                        Showing
-                        <span class="font-bold text-slate-900">
-                            ${start + 1}
-                        </span>
-                        to
-                        <span class="font-bold text-slate-900">
-                            ${end}
-                        </span>
-                        of
-                        <span class="font-bold text-slate-900">
-                            ${total}
-                        </span>
-                    </span>
-                `;
-
-
-                /*
-                 * PAGINATION BUTTONS
-                 */
-                if (pages > 1) {
-
-                    html += `
-                        <div class="flex items-center gap-1.5 order-1 sm:order-2">
-                    `;
-
-
-                    /*
-                     * PREVIOUS
-                     */
-                    html += `
-                        <button
-                            onclick="changePage(${currentPage - 1})"
-                            class="px-3.5 py-2 rounded-lg text-sm font-semibold border ${currentPage === 1
-                            ? 'text-slate-400 bg-slate-100 cursor-not-allowed'
-                            : 'text-slate-700 bg-white hover:bg-slate-50'
-                        }"
-                            ${currentPage === 1 ? 'disabled' : ''}
-                        >
-                            Prev
-                        </button>
-                    `;
-
-
-                    let last = null;
-
-
-                    for (let i = 1; i <= pages; i++) {
-
-                        const showPage =
-                            pages <= 7 ||
-                            i === 1 ||
-                            i === pages ||
-                            Math.abs(i - currentPage) <= 1;
-
-
-                        if (showPage) {
-
-                            const activeClass =
-                                i === currentPage
-                                    ? 'bg-[#14294D] text-white'
-                                    : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50';
-
-
-                            html += `
-                                <button
-                                    onclick="changePage(${i})"
-                                    class="h-9 w-9 flex items-center justify-center border rounded-lg text-sm font-bold ${activeClass}"
-                                >
-                                    ${i}
-                                </button>
-                            `;
-
-                            last = i;
-
-                        } else if (last !== '...') {
-
-                            html += `
-                                <span class="px-2 text-slate-400 font-medium">
-                                    ...
-                                </span>
-                            `;
-
-                            last = '...';
-                        }
-                    }
-
-
-                    /*
-                     * NEXT
-                     */
-                    html += `
-                        <button
-                            onclick="changePage(${currentPage + 1})"
-                            class="px-3.5 py-2 rounded-lg text-sm font-semibold border ${currentPage === pages
-                            ? 'text-slate-400 bg-slate-100 cursor-not-allowed'
-                            : 'text-slate-700 bg-white hover:bg-slate-50'
-                        }"
-                            ${currentPage === pages ? 'disabled' : ''}
-                        >
-                            Next
-                        </button>
-                    `;
-
-
-                    html += `</div>`;
-                }
-
-
-                if (paginationContainer) {
-                    paginationContainer.innerHTML = html;
-                }
-
-            }
-
-
-            /*
-             * SEARCH
-             */
-            function triggerSearch() {
-
-                const term = searchInput
-                    ? searchInput.value.toLowerCase().trim()
-                    : '';
-
-
-                filtered = [];
-
-
-                desktopItems.forEach(function (element, index) {
-
-                    const text = (
-                        element.innerText || ''
-                    ).toLowerCase();
-
-
-                    if (text.includes(term)) {
-                        filtered.push(index);
-                    }
-
-                });
-
-
-                currentPage = 1;
-
-                renderView();
-            }
-
-
-            /*
-             * SEARCH EVENT
-             */
-            if (searchInput) {
-
-                searchInput.addEventListener(
-                    'input',
-                    triggerSearch
-                );
-
-            }
-
-
-            /*
-             * INITIAL RENDER
-             */
-            triggerSearch();
-
-        });
-    </script>
+    <!-- Include your Delete Modal Component Here -->
+    @include('components.confirm-delete-modal')
 
 </body>
 

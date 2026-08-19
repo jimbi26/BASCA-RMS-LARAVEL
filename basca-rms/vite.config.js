@@ -10,6 +10,7 @@ export default defineConfig({
                 "resources/css/app.css",
                 "resources/js/app.js",
                 "resources/js/add-senior.js",
+                "resources/js/senior-record.js",
             ],
             refresh: true,
             fonts: [
