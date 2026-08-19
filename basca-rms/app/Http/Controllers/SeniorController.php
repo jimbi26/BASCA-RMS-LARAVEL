@@ -43,7 +43,9 @@ class SeniorController
     // DISPLAY ALL SENIOR CITIZENS
     public function seniors()
     {
-        return response('Seniors route is working', 200);
+        $seniors = collect();
+
+        return view('senior-records', compact('seniors'));
     }
     // SHOW ADD SENIOR PAGE
     public function create()
