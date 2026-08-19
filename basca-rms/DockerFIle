@@ -1,0 +1,65 @@
+FROM php:8.3-fpm-alpine
+
+WORKDIR /var/www/html
+
+# Install required system packages
+RUN apk add --no-cache \
+    bash \
+    curl \
+    git \
+    unzip \
+    zip \
+    libzip-dev \
+    oniguruma-dev \
+    icu-dev \
+    postgresql-dev
+
+# Install PHP extensions required by Laravel/PostgreSQL
+RUN docker-php-ext-install \
+    bcmath \
+    intl \
+    mbstring \
+    opcache \
+    pdo \
+    pdo_pgsql \
+    zip
+
+# Use production PHP configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+# Copy Composer from official Composer image
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Copy Laravel project
+COPY . .
+
+# Install production Composer dependencies
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader
+
+# Create required Laravel directories
+RUN mkdir -p \
+    storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache
+
+# Set Laravel permissions
+RUN chown -R www-data:www-data \
+    storage \
+    bootstrap/cache
+
+RUN chmod -R 775 \
+    storage \
+    bootstrap/cache
+
+# Enable PHP OPcache
+RUN docker-php-ext-enable opcache
+
+EXPOSE 9000
+
+CMD ["php-fpm", "-F"]
