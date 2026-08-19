@@ -43,12 +43,10 @@ class SeniorController
     // DISPLAY ALL SENIOR CITIZENS
     public function seniors()
     {
-        $seniors = SeniorCitizen::latest('created_at')
-            ->paginate(50);
-
-        return view('senior-records', compact('seniors'));
+        return view('senior-records', [
+            'seniors' => collect()
+        ]);
     }
-
     // SHOW ADD SENIOR PAGE
     public function create()
     {
