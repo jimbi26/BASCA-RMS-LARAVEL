@@ -1,3 +1,31 @@
+# ============================================================
+# Stage 1: Build Vite assets
+# ============================================================
+FROM node:22-alpine AS frontend
+
+WORKDIR /var/www/html
+
+# Copy npm dependency files
+COPY package*.json ./
+
+# Install Node dependencies
+RUN npm ci
+
+# Copy frontend source/config
+COPY resources ./resources
+COPY vite.config.* ./
+
+# Copy these if they exist in your project
+COPY postcss.config.* ./
+COPY tailwind.config.* ./
+
+# Build production assets
+RUN npm run build
+
+
+# ============================================================
+# Stage 2: Laravel application
+# ============================================================
 FROM php:8.3-fpm-alpine
 
 WORKDIR /var/www/html
@@ -39,6 +67,9 @@ RUN composer install \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader
+
+# Copy Vite production build from frontend stage
+COPY --from=frontend /var/www/html/public/build /var/www/html/public/build
 
 # Create required Laravel directories
 RUN mkdir -p \
