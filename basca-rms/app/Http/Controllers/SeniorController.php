@@ -43,9 +43,9 @@ class SeniorController
     // DISPLAY ALL SENIOR CITIZENS
     public function seniors()
     {
-        // Fetch all senior records ordered by newest first
-        $seniors = SeniorCitizen::latest('created_at')->get();
-        // In your Controller
+        $seniors = SeniorCitizen::latest('created_at')
+            ->paginate(50);
+
         return view('senior-records', compact('seniors'));
     }
 
