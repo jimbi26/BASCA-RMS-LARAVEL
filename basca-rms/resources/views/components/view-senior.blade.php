@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <x-browse-top />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>BASCA-RMS - {{ $senior->first_name }} {{ $senior->last_name }}</title>
 </head>
@@ -22,6 +23,18 @@
                 $sectionHeaderClass = "flex items-center gap-3 px-5 py-3.5 bg-gradient-to-r from-[#14294D]/10 via-[#14294D]/5 to-transparent border-l-4 border-[#C69A2E] text-[#14294D] text-lg md:text-xl font-bold tracking-tight rounded-r-xl mb-6";
                 $isMale = strtolower($senior->sex) === 'male';
             @endphp
+
+            @if(session('success'))
+                <div class="rounded-xl border border-green-200 bg-green-50 p-4 text-green-700 font-medium mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="rounded-xl border border-red-200 bg-red-50 p-4 text-red-700 font-medium mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
 
             <!-- CONTAINER CARD -->
             <div class="rounded-2xl border border-slate-200 bg-white shadow-md overflow-hidden">
@@ -45,13 +58,6 @@
                             <i class="fa-solid fa-arrow-left-long text-lg"></i>
                             BACK
                         </a>
-
-                        <!-- PRINT BUTTON -->
-                        <button type="button" onclick="window.print()"
-                            class="inline-flex items-center justify-center gap-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3.5 text-base md:text-lg border border-slate-300 transition-all duration-150 active:scale-[0.98] shadow-sm">
-                            <i class="fa-solid fa-print text-lg"></i>
-                            PRINT
-                        </button>
 
                         <!-- EDIT BUTTON -->
                         <a href="{{ route('seniors.edit', $senior->senior_id) }}"
@@ -238,65 +244,154 @@
                             <span>4. Documents & Attachments</span>
                         </div>
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+
                             <!-- Photo -->
                             <div>
                                 <label class="{{ $labelClass }}">Photo (2x2 / Profile)</label>
-                                @if($senior->photo)
-                                    <img src="{{ $senior->photo_url }}"
-                                        alt="{{ $senior->first_name }} {{ $senior->last_name }}"
-                                        class="w-28 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
-                                @else
-                                    <div
-                                        class="flex flex-col items-center justify-center w-28 h-28 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-slate-400">
-                                        <i class="fa-solid fa-image text-xl"></i>
-                                        <span class="text-[10px] font-semibold uppercase mt-1">No Photo</span>
-                                    </div>
-                                @endif
+                                <div class="mt-2 flex flex-col xl:flex-row items-start xl:items-center gap-4">
+                                    @if($senior->photo)
+                                        <img src="{{ $senior->photo_url }}"
+                                            alt="{{ $senior->first_name }} {{ $senior->last_name }}"
+                                            class="w-28 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
+
+                                        <div class="flex items-center gap-3">
+                                            <button type="button" onclick="printPhotoA4(this)"
+                                                data-photo-url="{{ $senior->photo_url }}"
+                                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#14294D] hover:bg-[#1b345f] text-white font-bold px-4 py-2.5 text-base border border-transparent transition-all duration-150 active:scale-[0.98] shadow-md">
+                                                <i class="fa-solid fa-print text-lg"></i>
+                                                <span>Print on A4</span>
+                                            </button>
+
+                                            <form action="{{ route('seniors.document.destroy', ['senior_id' => $senior->senior_id, 'field' => 'photo']) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Delete this photo? This action cannot be undone.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-red-100 hover:bg-red-200 text-red-700 font-bold border border-transparent transition-all duration-150 active:scale-[0.98] shadow-sm">
+                                                    <i class="fa-solid fa-trash-can text-lg"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @else
+                                        <div
+                                            class="flex flex-col items-center justify-center w-28 h-28 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-slate-400">
+                                            <i class="fa-solid fa-image text-xl"></i>
+                                            <span class="text-[10px] font-semibold uppercase mt-1">No Photo</span>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
 
                             <!-- Senior ID Image -->
                             <div>
                                 <label class="{{ $labelClass }}">Senior ID Image</label>
-                                @if($senior->senior_id_image)
-                                    <img src="{{ $senior->senior_id_image_url }}" alt="Senior ID"
-                                        class="w-28 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
-                                @else
-                                    <div
-                                        class="flex flex-col items-center justify-center w-28 h-28 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-slate-400">
-                                        <i class="fa-solid fa-id-card text-xl"></i>
-                                        <span class="text-[10px] font-semibold uppercase mt-1">No File</span>
-                                    </div>
-                                @endif
+                                <div class="mt-2 flex flex-col xl:flex-row items-start xl:items-center gap-4">
+                                    @if($senior->senior_id_image)
+                                        <img src="{{ $senior->senior_id_image_url }}" alt="Senior ID"
+                                            class="w-28 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
+
+                                        <div class="flex items-center gap-3">
+                                            <button type="button" onclick="printPhotoA4(this)"
+                                                data-photo-url="{{ $senior->senior_id_image_url }}"
+                                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#14294D] hover:bg-[#1b345f] text-white font-bold px-4 py-2.5 text-base border border-transparent transition-all duration-150 active:scale-[0.98] shadow-md">
+                                                <i class="fa-solid fa-print text-lg"></i>
+                                                <span>Print on A4</span>
+                                            </button>
+
+                                            <form action="{{ route('seniors.document.destroy', ['senior_id' => $senior->senior_id, 'field' => 'senior_id_image']) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Delete this Senior ID image? This action cannot be undone.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-red-100 hover:bg-red-200 text-red-700 font-bold border border-transparent transition-all duration-150 active:scale-[0.98] shadow-sm">
+                                                    <i class="fa-solid fa-trash-can text-lg"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @else
+                                        <div
+                                            class="flex flex-col items-center justify-center w-28 h-28 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-slate-400">
+                                            <i class="fa-solid fa-id-card text-xl"></i>
+                                            <span class="text-[10px] font-semibold uppercase mt-1">No File</span>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
 
                             <!-- PSA Birth Certificate -->
                             <div>
                                 <label class="{{ $labelClass }}">PSA Birth Certificate</label>
-                                @if($senior->psa)
-                                    <img src="{{ $senior->psa_url }}" alt="PSA Certificate"
-                                        class="w-28 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
-                                @else
-                                    <div
-                                        class="flex flex-col items-center justify-center w-28 h-28 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-slate-400">
-                                        <i class="fa-solid fa-file-lines text-xl"></i>
-                                        <span class="text-[10px] font-semibold uppercase mt-1">No File</span>
-                                    </div>
-                                @endif
+                                <div class="mt-2 flex flex-col xl:flex-row items-start xl:items-center gap-4">
+                                    @if($senior->psa)
+                                        <img src="{{ $senior->psa_url }}" alt="PSA Certificate"
+                                            class="w-28 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
+
+                                        <div class="flex items-center gap-3">
+                                            <button type="button" onclick="printPhotoA4(this)"
+                                                data-photo-url="{{ $senior->psa_url }}"
+                                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#14294D] hover:bg-[#1b345f] text-white font-bold px-4 py-2.5 text-base border border-transparent transition-all duration-150 active:scale-[0.98] shadow-md">
+                                                <i class="fa-solid fa-print text-lg"></i>
+                                                <span>Print on A4</span>
+                                            </button>
+
+                                            <form action="{{ route('seniors.document.destroy', ['senior_id' => $senior->senior_id, 'field' => 'psa']) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Delete this PSA certificate? This action cannot be undone.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-red-100 hover:bg-red-200 text-red-700 font-bold border border-transparent transition-all duration-150 active:scale-[0.98] shadow-sm">
+                                                    <i class="fa-solid fa-trash-can text-lg"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @else
+                                        <div
+                                            class="flex flex-col items-center justify-center w-28 h-28 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-slate-400">
+                                            <i class="fa-solid fa-file-lines text-xl"></i>
+                                            <span class="text-[10px] font-semibold uppercase mt-1">No File</span>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
 
                             <!-- NCSC Form -->
                             <div>
                                 <label class="{{ $labelClass }}">NCSC Form</label>
-                                @if($senior->ncsc_form)
-                                    <img src="{{ $senior->ncsc_form_url }}" alt="NCSC Form"
-                                        class="w-28 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
-                                @else
-                                    <div
-                                        class="flex flex-col items-center justify-center w-28 h-28 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-slate-400">
-                                        <i class="fa-solid fa-file-lines text-xl"></i>
-                                        <span class="text-[10px] font-semibold uppercase mt-1">No File</span>
-                                    </div>
-                                @endif
+                                <div class="mt-2 flex flex-col xl:flex-row items-start xl:items-center gap-4">
+                                    @if($senior->ncsc_form)
+                                        <img src="{{ $senior->ncsc_form_url }}" alt="NCSC Form"
+                                            class="w-28 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
+
+                                        <div class="flex items-center gap-3">
+                                            <button type="button" onclick="printPhotoA4(this)"
+                                                data-photo-url="{{ $senior->ncsc_form_url }}"
+                                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#14294D] hover:bg-[#1b345f] text-white font-bold px-4 py-2.5 text-base border border-transparent transition-all duration-150 active:scale-[0.98] shadow-md">
+                                                <i class="fa-solid fa-print text-lg"></i>
+                                                <span>Print on A4</span>
+                                            </button>
+
+                                            <form action="{{ route('seniors.document.destroy', ['senior_id' => $senior->senior_id, 'field' => 'ncsc_form']) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Delete this NCSC form? This action cannot be undone.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-red-100 hover:bg-red-200 text-red-700 font-bold border border-transparent transition-all duration-150 active:scale-[0.98] shadow-sm">
+                                                    <i class="fa-solid fa-trash-can text-lg"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @else
+                                        <div
+                                            class="flex flex-col items-center justify-center w-28 h-28 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-slate-400">
+                                            <i class="fa-solid fa-file-lines text-xl"></i>
+                                            <span class="text-[10px] font-semibold uppercase mt-1">No File</span>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -307,6 +402,13 @@
 
     @include('components.confirm-delete-modal')
 
+    <script>
+        function printPhotoA4(btn) {
+            const photoUrl = btn.getAttribute('data-photo-url');
+            window.open('/print/photo?url=' + encodeURIComponent(photoUrl), '_blank', 'width=800,height=600');
+        }
+    </script>
+
 </body>
 
-</html
+</html>

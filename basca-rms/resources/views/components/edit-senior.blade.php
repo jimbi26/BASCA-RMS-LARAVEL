@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <x-browse-top />
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/add-senior.js'])
     <title>BASCA-RMS - Edit Senior Citizen</title>
 </head>
@@ -68,9 +69,8 @@
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4">
                             <div>
                                 <label class="{{ $labelClass }}">Senior ID</label>
-                                <input type="text" value="{{ $senior->senior_id }}" readonly
-                                    class="{{ $inputClass }} bg-slate-200/60 cursor-not-allowed">
-                                <input type="hidden" name="senior_id" value="{{ $senior->senior_id }}">
+                                <input type="text" name="senior_id" value="{{ $senior->senior_id }}"
+                                    class="{{ $inputClass }}">
                             </div>
 
                             <div>

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <x-browse-top />
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/senior-record.js'])
     <title>BASCA-RMS - Senior Citizen Directory</title>
 </head>
@@ -132,9 +133,7 @@
                                             </td>
                                             <td class="px-6 py-5 whitespace-nowrap">
                                                 <span
-                                                    class="inline-flex items-center gap-1.5 font-mono text-base font-semibold text-slate-800 bg-slate-100 px-3.5 py-2 rounded-lg border border-slate-300 shadow-2xs searchable-rrn">
-                                                    {{ $senior->rrn ?? 'N/A' }}
-                                                </span>
+                                                    class="font-mono font-semibold {{ $senior->rrn ? 'text-slate-800' : 'text-slate-400' }} text-base searchable-rrn">{{ $senior->rrn ?? 'N/A' }}</span>
                                             </td>
                                             <td class="px-6 py-5 whitespace-nowrap text-lg font-semibold text-slate-700">
                                                 {{ $senior->barangay }}
@@ -208,7 +207,7 @@
                                                 class="font-bold text-slate-900 text-sm">{{ $senior->age }} yrs</span></div>
                                         <div><span
                                                 class="block text-slate-400 font-semibold uppercase text-[10px]">RRN</span><span
-                                                class="font-mono font-bold text-slate-800 text-xs truncate block searchable-rrn">{{ $senior->rrn ?? 'N/A' }}</span>
+                                                class="font-mono font-bold {{ $senior->rrn ? 'text-slate-800' : 'text-slate-400' }} text-xs truncate block searchable-rrn">{{ $senior->rrn ?? 'N/A' }}</span>
                                         </div>
                                         <div><span
                                                 class="block text-slate-400 font-semibold uppercase text-[10px]">Barangay</span><span

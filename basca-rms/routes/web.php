@@ -113,3 +113,24 @@ Route::put('/senior/{senior_id}', [SeniorController::class, 'update'])
 
 Route::delete('/senior/{senior_id}', [SeniorController::class, 'destroy'])
     ->name('seniors.destroy');
+
+
+/*
+|--------------------------------------------------------------------------
+| Print Photo (A4)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/print/photo', [SeniorController::class, 'printPhoto'])
+    ->name('seniors.print-photo');
+
+
+/*
+|--------------------------------------------------------------------------
+| Delete Document Attachment
+|--------------------------------------------------------------------------
+*/
+
+Route::delete('/senior/{senior_id}/document/{field}', [SeniorController::class, 'destroyDocument'])
+    ->whereIn('field', ['photo', 'senior_id_image', 'psa', 'ncsc_form'])
+    ->name('seniors.document.destroy');

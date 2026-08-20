@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <x-browse-top />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Poppins:wght@400;500;600&display=swap"
@@ -114,8 +115,8 @@
                     <div class="ml-6 pl-4 border-l-2 border-[#C69A2E]/30">
 
                         <div class="flex items-center gap-3 px-4 py-2.5 rounded-lg
-                                                bg-white/10 text-[#C69A2E] font-semibold
-                                                border border-white/5">
+                                                    bg-white/10 text-[#C69A2E] font-semibold
+                                                    border border-white/5">
 
                             <i class="fa-solid fa-user-plus w-5 text-center text-sm"></i>
 
@@ -133,8 +134,8 @@
                     <div class="ml-6 pl-4 border-l-2 border-[#C69A2E]/30">
 
                         <div class="flex items-center gap-3 px-4 py-2.5 rounded-lg
-                                                bg-white/10 text-[#C69A2E] font-semibold
-                                                border border-white/5">
+                                                    bg-white/10 text-[#C69A2E] font-semibold
+                                                    border border-white/5">
 
                             <i class="fa-solid fa-pen-to-square w-5 text-center text-sm"></i>
 
@@ -152,8 +153,8 @@
                     <div class="ml-6 pl-4 border-l-2 border-[#C69A2E]/30">
 
                         <div class="flex items-center gap-3 px-4 py-2.5 rounded-lg
-                                                bg-white/10 text-[#C69A2E] font-semibold
-                                                border border-white/5">
+                                                    bg-white/10 text-[#C69A2E] font-semibold
+                                                    border border-white/5">
 
                             <i class="fa-solid fa-eye w-5 text-center text-sm"></i>
 

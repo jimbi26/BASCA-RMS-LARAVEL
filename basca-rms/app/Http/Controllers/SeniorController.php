@@ -120,6 +120,7 @@ class SeniorController
         $senior = SeniorCitizen::where('senior_id', $senior_id)->firstOrFail();
 
         $data = $request->only([
+            'senior_id',
             'rrn',
             'first_name',
             'middle_name',
@@ -173,5 +174,35 @@ class SeniorController
         return redirect()
             ->route('seniors.senior-records')
             ->with('success', 'Senior citizen deleted successfully.');
+    }
+
+    public function printPhoto(Request $request)
+    {
+        $photoUrl = $request->query('url');
+
+        return view('print.photo-a4', compact('photoUrl'));
+    }
+
+    public function destroyDocument(Request $request, $senior_id)
+    {
+        $field = $request->route('field');
+
+        $allowedFields = ['photo', 'senior_id_image', 'psa', 'ncsc_form'];
+        if (!in_array($field, $allowedFields)) {
+            return back()->with('error', 'Invalid document type.');
+        }
+
+        $senior = SeniorCitizen::where('senior_id', $senior_id)->firstOrFail();
+
+        $filename = $senior->$field;
+
+        if ($filename) {
+            $this->storage->delete($filename);
+        }
+
+        $senior->$field = null;
+        $senior->save();
+
+        return back()->with('success', ucfirst(str_replace('_', ' ', $field)) . ' deleted successfully.');
     }
 }
