@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\SeniorCitizen;
+use App\Services\SupabaseStorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SeniorController
 {
+    public function __construct(protected SupabaseStorageService $storage)
+    {
+    }
     // DASHBOARD
     // Fetch statistics and display 5 most recent seniors
     public function index()
@@ -58,34 +62,42 @@ class SeniorController
     // STORE NEW SENIOR CITIZEN
     public function store(Request $request)
     {
-        SeniorCitizen::create(
-            $request->only([
-                'senior_id',
-                'rrn',
-                'first_name',
-                'middle_name',
-                'last_name',
-                'birth_date',
-                'sex',
-                'barangay',
-                'contact_number',
-                'photo',
-                'psa',
-                'ncsc_form',
-                'senior_id_image',
-                'purok',
-                'age',
-                'pension',
-                'philhealth_number',
-                'dependency',
-                'housing',
-                'health_problems',
-                'disability',
-                'medicines',
-            ])
-        );
+        $data = $request->only([
+            'senior_id',
+            'rrn',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'birth_date',
+            'sex',
+            'barangay',
+            'contact_number',
+            'purok',
+            'age',
+            'pension',
+            'philhealth_number',
+            'dependency',
+            'housing',
+            'health_problems',
+            'disability',
+            'medicines',
+        ]);
 
-        return redirect()->route('seniors.senior-records');
+        foreach (['photo', 'senior_id_image', 'psa', 'ncsc_form'] as $field) {
+            if ($request->hasFile($field) && $request->file($field)->isValid()) {
+                $file = $request->file($field);
+                $filename = time() . '_' . $request->senior_id . '_' . $field . '.' . $file->getClientOriginalExtension();
+                $uploaded = $this->storage->upload($filename, file_get_contents($file), $file->getMimeType());
+                if (!$uploaded) {
+                    return back()->with('error', 'Failed to upload ' . $field . '. Please try again.')->withInput();
+                }
+                $data[$field] = $filename;
+            }
+        }
+
+        SeniorCitizen::create($data);
+
+        return redirect()->route('seniors.senior-records')->with('success', 'Senior citizen added successfully.');
     }
 
     // SHOW SENIOR CITIZEN
@@ -132,14 +144,22 @@ class SeniorController
             if ($request->hasFile($field) && $request->file($field)->isValid()) {
                 $file = $request->file($field);
                 $filename = time() . '_' . $senior_id . '_' . $field . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('storage'), $filename);
+
+                if ($senior->$field) {
+                    $this->storage->delete($senior->$field);
+                }
+
+                $uploaded = $this->storage->upload($filename, file_get_contents($file), $file->getMimeType());
+                if (!$uploaded) {
+                    return back()->with('error', 'Failed to upload ' . $field . '. Please try again.')->withInput();
+                }
                 $data[$field] = $filename;
             }
         }
 
         $senior->update($data);
 
-        return redirect()->route('seniors.show', $senior->senior_id);
+        return redirect()->route('seniors.show', $senior->senior_id)->with('success', 'Record updated successfully.');
     }
 
 

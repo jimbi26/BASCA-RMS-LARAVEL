@@ -54,6 +54,12 @@
                     </div>
                 </div>
 
+                @if(session('error'))
+                    <div class="mx-6 sm:mx-8 mt-6 rounded-xl border border-red-200 bg-red-50 p-4 text-red-700 font-medium">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 <!-- FORM SECTION -->
                 <form action="{{ route('seniors.store') }}" method="POST" enctype="multipart/form-data"
                     class="p-6 sm:p-8 space-y-10">

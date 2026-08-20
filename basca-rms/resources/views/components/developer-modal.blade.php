@@ -1,20 +1,19 @@
 <!-- floating-developer-modal.blade.php -->
-<div class="relative z-50">
-
+<div>
     <!-- FLOATING BUTTON -->
     <button onclick="toggleDevModal(true)" type="button"
-        class="fixed bottom-6 right-6 flex h-14 w-14 items-center justify-center rounded-full bg-[#14294D] text-[#C69A2E] shadow-xl ring-4 ring-white/20 transition-all duration-300 hover:scale-110 hover:bg-[#1b345f] focus:outline-none"
+        class="fixed bottom-6 right-6 z-[90] flex h-14 w-14 items-center justify-center rounded-full bg-[#14294D] text-[#C69A2E] shadow-xl ring-4 ring-white/20 transition-all duration-300 hover:scale-110 hover:bg-[#1b345f] focus:outline-none"
         title="Meet the Developers">
         <i class="fa-solid fa-code text-xl"></i>
     </button>
 
-    <!-- MODAL OVERLAY -->
+    <!-- MODAL OVERLAY (Set to z-[9999] to cover full screen & sidebar) -->
     <div id="dev-modal" onclick="if(event.target === this) toggleDevModal(false)"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 opacity-0 backdrop-blur-sm transition-opacity duration-150 pointer-events-none">
+        class="fixed inset-0 z-[9999] hidden opacity-0 backdrop-blur-none bg-slate-900/0 flex items-center justify-center p-4 transition-all duration-300">
 
         <!-- CARD CONTAINER -->
         <div id="dev-modal-card"
-            class="relative w-full max-w-md overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 shadow-2xl scale-95 opacity-0 transition-all duration-150">
+            class="relative w-full max-w-md scale-95 overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 shadow-2xl opacity-0 transition-all duration-300">
 
             <button onclick="toggleDevModal(false)" type="button"
                 class="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-600">
@@ -49,7 +48,6 @@
                             BS Information Technology (2026)
                         </p>
                     </div>
-
                 </div>
             </div>
 
@@ -64,27 +62,32 @@
 </div>
 
 <script>
-    function toggleDevModal(show) {
+    window.toggleDevModal = function (show) {
         const modal = document.getElementById('dev-modal');
         const card = document.getElementById('dev-modal-card');
 
+        if (!modal || !card) return;
+
         if (show) {
-            modal.classList.remove('pointer-events-none');
+            modal.classList.remove('hidden');
 
             requestAnimationFrame(() => {
-                modal.classList.remove('opacity-0');
-                card.classList.remove('opacity-0', 'scale-95');
-                card.classList.add('scale-100');
-            });
+                modal.classList.remove('opacity-0', 'backdrop-blur-none', 'bg-slate-900/0');
+                modal.classList.add('opacity-100', 'backdrop-blur-sm', 'bg-slate-900/60');
 
+                card.classList.remove('opacity-0', 'scale-95');
+                card.classList.add('opacity-100', 'scale-100');
+            });
         } else {
-            modal.classList.add('opacity-0');
+            modal.classList.remove('opacity-100', 'backdrop-blur-sm', 'bg-slate-900/60');
+            modal.classList.add('opacity-0', 'backdrop-blur-none', 'bg-slate-900/0');
+
+            card.classList.remove('opacity-100', 'scale-100');
             card.classList.add('opacity-0', 'scale-95');
-            card.classList.remove('scale-100');
 
             setTimeout(() => {
-                modal.classList.add('pointer-events-none');
-            }, 150);
+                modal.classList.add('hidden');
+            }, 300);
         }
-    }
+    };
 </script>

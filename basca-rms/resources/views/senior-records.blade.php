@@ -11,8 +11,9 @@
 <body class="bg-slate-100 text-slate-800 antialiased font-sans">
     <div class="flex min-h-screen">
         <x-sidebar />
-
-        <main class="w-full flex-1 space-y-6 p-4 pt-24 sm:p-6 lg:ml-[360px] lg:p-8">
+        <x-page-loader />
+        <x-fetching-overlay />
+        <main id="main-content" class="w-full flex-1 space-y-6 p-4 pt-24 sm:p-6 lg:ml-[360px] lg:p-8">
 
             @php
                 $btnAction = "inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-600 transition-all hover:scale-105 active:scale-95 text-base shadow-xs";
@@ -141,10 +142,12 @@
                                             <td class="px-6 py-5 text-right whitespace-nowrap">
                                                 <div class="flex justify-end gap-2">
                                                     <a href="{{ route('seniors.show', $senior->senior_id) }}"
+                                                        onclick="showFetchingOverlay('Please wait, data is fetching...')"
                                                         class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-600 transition-all hover:border-[#14294D] hover:bg-[#14294D] hover:text-white hover:shadow-sm"
                                                         title="View Profile">
                                                         <i class="fa-solid fa-eye text-base"></i>
                                                     </a>
+
                                                     <button type="button"
                                                         onclick="openDeleteModal('{{ route('seniors.destroy', $senior->senior_id) }}')"
                                                         class="{{ $btnAction }} h-8 w-8 text-xs hover:bg-red-600 hover:text-white"
@@ -185,6 +188,7 @@
                                         </div>
                                         <div class="flex items-center shrink-0 gap-1.5">
                                             <a href="{{ route('seniors.show', $senior->senior_id) }}"
+                                                onclick="showFetchingOverlay('Please wait, data is fetching...')"
                                                 class="{{ $btnAction }} h-9 w-9 text-sm hover:bg-[#14294D] hover:text-white"><i
                                                     class="fa-solid fa-eye"></i></a>
 
@@ -222,7 +226,6 @@
                     </div>
                 @endif
             </div>
-            <x-developer-modal />
         </main>
     </div>
     <!-- Include your Delete Modal Component Here -->

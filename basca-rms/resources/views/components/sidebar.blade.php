@@ -210,6 +210,24 @@
                 spinner.classList.remove('hidden');
             }
         }
+
+        function showFetchingOverlay(message) {
+            const overlay = document.getElementById('fetching-overlay');
+            const text = document.getElementById('fetching-overlay-text');
+            if (overlay) {
+                if (text && message) {
+                    text.textContent = message;
+                }
+                overlay.classList.remove('hidden');
+            }
+        }
+
+        function hideFetchingOverlay() {
+            const overlay = document.getElementById('fetching-overlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+            }
+        }
     </script>
 </body>
 

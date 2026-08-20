@@ -12,8 +12,9 @@
 
     <div class="flex min-h-screen">
         <x-sidebar />
-
-        <main class="w-full flex-1 space-y-6 p-4 pt-24 sm:p-6 lg:ml-[360px] lg:p-8">
+        <x-page-loader />
+        <x-fetching-overlay />
+        <main id="main-content" class="w-full flex-1 space-y-6 p-4 pt-24 sm:p-6 lg:ml-[22rem] lg:p-8">
 
             @php
                 $total = $totalSeniors ?? $seniors->count();
@@ -165,6 +166,7 @@
                                             <div class="flex justify-end gap-2">
                                                 <!-- View Button -->
                                                 <a href="{{ route('seniors.show', $senior->senior_id) }}"
+                                                    onclick="showFetchingOverlay('Please wait, data is fetching...')"
                                                     class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-600 transition-all duration-150 hover:border-[#14294D] hover:bg-[#14294D] hover:text-white hover:shadow-sm"
                                                     title="View Profile">
                                                     <i class="fa-solid fa-eye text-base"></i>
@@ -172,10 +174,10 @@
 
                                                 <!-- Edit Button -->
                                                 <!-- <a href="{{ route('seniors.edit', $senior->senior_id) }}"
-                                                                    class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-600 transition-all duration-150 hover:border-[#C69A2E] hover:bg-[#C69A2E] hover:text-white hover:shadow-sm"
-                                                                    title="Edit Record">
-                                                                    <i class="fa-solid fa-pen-to-square text-base"></i>
-                                                                </a> -->
+                                                                                                    class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-600 transition-all duration-150 hover:border-[#C69A2E] hover:bg-[#C69A2E] hover:text-white hover:shadow-sm"
+                                                                                                    title="Edit Record">
+                                                                                                    <i class="fa-solid fa-pen-to-square text-base"></i>
+                                                                                                </a> -->
 
                                                 <!-- Delete Button -->
                                                 <button type="button"
@@ -219,11 +221,12 @@
                                     <!-- Actions -->
                                     <div class="flex items-center shrink-0 gap-1">
                                         <a href="{{ route('seniors.show', $senior->senior_id) }}"
+                                            onclick="showFetchingOverlay('Please wait, data is fetching...')"
                                             class="{{ $btnAction }} h-8 w-8 text-xs hover:bg-[#14294D] hover:text-white"
                                             title="View"><i class="fa-solid fa-eye"></i></a>
                                         <!-- <a href="{{ route('seniors.edit', $senior->senior_id) }}"
-                                                    class="{{ $btnAction }} h-8 w-8 text-xs hover:bg-[#C69A2E] hover:text-white"
-                                                    title="Edit"><i class="fa-solid fa-pen-to-square"></i></a> -->
+                                                                                    class="{{ $btnAction }} h-8 w-8 text-xs hover:bg-[#C69A2E] hover:text-white"
+                                                                                    title="Edit"><i class="fa-solid fa-pen-to-square"></i></a> -->
                                         <button type="button"
                                             onclick="openDeleteModal('{{ route('seniors.destroy', $senior->senior_id) }}')"
                                             class="{{ $btnAction }} h-8 w-8 text-xs hover:bg-red-600 hover:text-white"
@@ -262,11 +265,11 @@
                     </div>
                 @endif
             </div>
-
-            <x-developer-modal />
         </main>
 
     </div>
+
+    <x-developer-modal />
     <!-- Include your Delete Modal Component Here -->
     @include('components.confirm-delete-modal')
 </body>

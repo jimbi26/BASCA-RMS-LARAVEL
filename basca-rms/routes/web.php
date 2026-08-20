@@ -84,6 +84,7 @@ Route::get('/senior/{senior_id}', [SeniorController::class, 'show'])
     ->name('seniors.show');
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Edit Senior

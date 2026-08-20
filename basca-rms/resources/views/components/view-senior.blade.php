@@ -40,11 +40,11 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <!-- BACK BUTTON -->
-                        <button type="button" onclick="history.back()"
+                        <a href="{{ route('seniors.senior-records') }}"
                             class="inline-flex items-center justify-center gap-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3.5 text-base md:text-lg border border-slate-300 transition-all duration-150 active:scale-[0.98] shadow-sm">
                             <i class="fa-solid fa-arrow-left-long text-lg"></i>
                             BACK
-                        </button>
+                        </a>
 
                         <!-- PRINT BUTTON -->
                         <button type="button" onclick="window.print()"
@@ -242,7 +242,7 @@
                             <div>
                                 <label class="{{ $labelClass }}">Photo (2x2 / Profile)</label>
                                 @if($senior->photo)
-                                    <img src="{{ asset('storage/' . $senior->photo) }}"
+                                    <img src="{{ $senior->photo_url }}"
                                         alt="{{ $senior->first_name }} {{ $senior->last_name }}"
                                         class="w-28 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
                                 @else
@@ -258,7 +258,7 @@
                             <div>
                                 <label class="{{ $labelClass }}">Senior ID Image</label>
                                 @if($senior->senior_id_image)
-                                    <img src="{{ asset('storage/' . $senior->senior_id_image) }}" alt="Senior ID"
+                                    <img src="{{ $senior->senior_id_image_url }}" alt="Senior ID"
                                         class="w-28 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
                                 @else
                                     <div
@@ -273,7 +273,7 @@
                             <div>
                                 <label class="{{ $labelClass }}">PSA Birth Certificate</label>
                                 @if($senior->psa)
-                                    <img src="{{ asset('storage/' . $senior->psa) }}" alt="PSA Certificate"
+                                    <img src="{{ $senior->psa_url }}" alt="PSA Certificate"
                                         class="w-28 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
                                 @else
                                     <div
@@ -288,7 +288,7 @@
                             <div>
                                 <label class="{{ $labelClass }}">NCSC Form</label>
                                 @if($senior->ncsc_form)
-                                    <img src="{{ asset('storage/' . $senior->ncsc_form) }}" alt="NCSC Form"
+                                    <img src="{{ $senior->ncsc_form_url }}" alt="NCSC Form"
                                         class="w-28 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
                                 @else
                                     <div
@@ -302,8 +302,6 @@
                     </div>
                 </div>
             </div>
-
-            <x-developer-modal />
         </main>
     </div>
 
