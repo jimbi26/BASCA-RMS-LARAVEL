@@ -8,7 +8,7 @@
     <title>
         BASCA-RMS | Senior Citizen Records Management System
     </title>
-
+ <x-browse-top />
     <meta name="description"
         content="Barangay Association of Senior Citizens Affairs Records Management System - Bagabag, Nueva Vizcaya">
     {{-- Tailwind --}}
