@@ -64,7 +64,7 @@
 
                     <h1
                         class="font-['Fraunces'] text-4xl sm:text-5xl lg:text-[54px] font-semibold leading-[1.1] text-white">
-                        Bagabag's <br>
+                        Bagabag <br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/70">senior
                             records.</span>
                     </h1>

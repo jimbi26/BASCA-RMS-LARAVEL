@@ -35,4 +35,22 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Supabase Storage
+    |--------------------------------------------------------------------------
+    |
+    | Credentials used to upload and delete senior citizen documents (photos,
+    | IDs, certificates) in a Supabase Storage bucket. Read from config so the
+    | application keeps working after `php artisan config:cache`.
+    |
+    */
+
+    'supabase' => [
+        'url' => env('SUPABASE_URL'),
+        'service_key' => env('SUPABASE_SERVICE_KEY'),
+        'bucket' => env('SUPABASE_BUCKET', 'senior-documents'),
+        'region' => env('SUPABASE_REGION'),
+    ],
+
 ];

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <x-browse-top />
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/add-senior.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>BASCA-RMS - Edit Senior Citizen</title>
 </head>
 
@@ -48,11 +48,7 @@
                     </div>
                 </div>
 
-                @if(session('error'))
-                    <div class="mx-6 sm:mx-8 mt-6 rounded-xl border border-red-200 bg-red-50 p-4 text-red-700 font-medium">
-                        {{ session('error') }}
-                    </div>
-                @endif
+                <x-notification-modal />
 
                 <!-- FORM SECTION -->
                 <form action="{{ route('seniors.update', $senior->senior_id) }}" method="POST"

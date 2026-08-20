@@ -24,45 +24,39 @@
                 $sectionHeaderClass = "flex items-center gap-3 px-5 py-3.5 bg-gradient-to-r from-[#14294D]/10 via-[#14294D]/5 to-transparent border-l-4 border-[#C69A2E] text-[#14294D] text-lg md:text-xl font-bold tracking-tight rounded-r-xl mb-6";
             @endphp
 
-            <!-- CONTAINER CARD -->
-            <div class="rounded-2xl border border-slate-200 bg-white shadow-md overflow-hidden">
+    <!-- CONTAINER CARD -->
+    <div class="rounded-2xl border border-slate-200 bg-white shadow-md overflow-hidden">
 
-                <!-- HEADER / TOOLBAR -->
-                <div
-                    class="flex flex-col gap-4 border-b border-slate-200 bg-white p-6 sm:p-8 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h1 class="font-serif text-3xl font-extrabold text-slate-900 sm:text-4xl tracking-tight">
-                            Add Senior Citizen
-                        </h1>
-                        <p class="mt-1 text-base font-medium text-slate-500">
-                            Register a complete senior citizen record into the system
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <!-- BACK BUTTON -->
-                        <button type="button" onclick="history.back()"
-                            class="inline-flex items-center justify-center gap-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3.5 text-base md:text-lg border border-slate-300 transition-all duration-150 active:scale-[0.98] shadow-sm">
-                            <i class="fa-solid fa-arrow-left-long text-lg"></i>
-                            BACK
-                        </button>
+        <!-- HEADER / TOOLBAR -->
+        <div
+            class="flex flex-col gap-4 border-b border-slate-200 bg-white p-6 sm:p-8 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <h1 class="font-serif text-3xl font-extrabold text-slate-900 sm:text-4xl tracking-tight">
+                    Add Senior Citizen
+                </h1>
+                <p class="mt-1 text-base font-medium text-slate-500">
+                    Register a complete senior citizen record into the system
+                </p>
+            </div>
+            <div class="flex items-center gap-3">
+                <!-- BACK BUTTON -->
+                <button type="button" onclick="history.back()"
+                    class="inline-flex items-center justify-center gap-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3.5 text-base md:text-lg border border-slate-300 transition-all duration-150 active:scale-[0.98] shadow-sm">
+                    <i class="fa-solid fa-arrow-left-long text-lg"></i>
+                    BACK
+                </button>
 
-                        <!-- CLEAR BUTTON (Non-functional) -->
-                        <button type="button"
-                            class="inline-flex items-center justify-center gap-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-6 py-3.5 text-base md:text-lg border border-rose-200 transition-all duration-150 active:scale-[0.98] shadow-sm">
-                            <i class="fa-solid fa-eraser text-lg"></i>
-                            CLEAR
-                        </button>
-                    </div>
-                </div>
-
-                @if(session('error'))
-                    <div class="mx-6 sm:mx-8 mt-6 rounded-xl border border-red-200 bg-red-50 p-4 text-red-700 font-medium">
-                        {{ session('error') }}
-                    </div>
-                @endif
+                <!-- CLEAR BUTTON -->
+                <button type="button" onclick="resetSeniorForm()"
+                    class="inline-flex items-center justify-center gap-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-6 py-3.5 text-base md:text-lg border border-rose-200 transition-all duration-150 active:scale-[0.98] shadow-sm">
+                    <i class="fa-solid fa-eraser text-lg"></i>
+                    CLEAR
+                </button>
+            </div>
+        </div>
 
                 <!-- FORM SECTION -->
-                <form action="{{ route('seniors.store') }}" method="POST" enctype="multipart/form-data"
+                <form action="{{ route('seniors.store') }}" method="POST" enctype="multipart/form-data" id="seniorForm"
                     class="p-6 sm:p-8 space-y-10">
                     @csrf
 

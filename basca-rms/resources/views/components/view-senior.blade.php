@@ -262,7 +262,8 @@
                                                 <span>Print on A4</span>
                                             </button>
 
-                                            <form action="{{ route('seniors.document.destroy', ['senior_id' => $senior->senior_id, 'field' => 'photo']) }}"
+                                            <form
+                                                action="{{ route('seniors.document.destroy', ['senior_id' => $senior->senior_id, 'field' => 'photo']) }}"
                                                 method="POST"
                                                 onsubmit="return confirm('Delete this photo? This action cannot be undone.');">
                                                 @csrf
@@ -299,7 +300,8 @@
                                                 <span>Print on A4</span>
                                             </button>
 
-                                            <form action="{{ route('seniors.document.destroy', ['senior_id' => $senior->senior_id, 'field' => 'senior_id_image']) }}"
+                                            <form
+                                                action="{{ route('seniors.document.destroy', ['senior_id' => $senior->senior_id, 'field' => 'senior_id_image']) }}"
                                                 method="POST"
                                                 onsubmit="return confirm('Delete this Senior ID image? This action cannot be undone.');">
                                                 @csrf
@@ -336,7 +338,8 @@
                                                 <span>Print on A4</span>
                                             </button>
 
-                                            <form action="{{ route('seniors.document.destroy', ['senior_id' => $senior->senior_id, 'field' => 'psa']) }}"
+                                            <form
+                                                action="{{ route('seniors.document.destroy', ['senior_id' => $senior->senior_id, 'field' => 'psa']) }}"
                                                 method="POST"
                                                 onsubmit="return confirm('Delete this PSA certificate? This action cannot be undone.');">
                                                 @csrf
@@ -373,7 +376,8 @@
                                                 <span>Print on A4</span>
                                             </button>
 
-                                            <form action="{{ route('seniors.document.destroy', ['senior_id' => $senior->senior_id, 'field' => 'ncsc_form']) }}"
+                                            <form
+                                                action="{{ route('seniors.document.destroy', ['senior_id' => $senior->senior_id, 'field' => 'ncsc_form']) }}"
                                                 method="POST"
                                                 onsubmit="return confirm('Delete this NCSC form? This action cannot be undone.');">
                                                 @csrf

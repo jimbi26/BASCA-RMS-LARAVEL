@@ -43,8 +43,8 @@ class SeniorCitizen extends Model
         if (!$value) {
             return null;
         }
-        $url = rtrim(env('SUPABASE_URL'), '/');
-        $bucket = env('SUPABASE_BUCKET', 'senior-documents');
+        $url = rtrim(config('services.supabase.url', ''), '/');
+        $bucket = config('services.supabase.bucket', 'senior-documents');
         return $url . '/storage/v1/object/public/' . $bucket . '/' . ltrim($value, '/');
     }
 

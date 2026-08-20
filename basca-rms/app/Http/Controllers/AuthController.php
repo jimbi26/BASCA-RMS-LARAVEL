@@ -32,6 +32,6 @@ class AuthController
     {
         auth()->logout();
 
-        return redirect('/login');
+        return redirect('/');
     }
 }

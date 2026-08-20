@@ -6,38 +6,17 @@ use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
-| Home
+| Home (Public)
 |--------------------------------------------------------------------------
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landing-page');
 });
 
-
 /*
 |--------------------------------------------------------------------------
-| Dashboard
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/dashboard', [SeniorController::class, 'index'])
-    ->name('dashboard');
-
-
-/*
-|--------------------------------------------------------------------------
-| Senior Records
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/seniors', [SeniorController::class, 'seniors'])
-    ->name('seniors.senior-records');
-
-
-/*
-|--------------------------------------------------------------------------
-| Authentication
+| Authentication (Public)
 |--------------------------------------------------------------------------
 */
 
@@ -45,92 +24,101 @@ Route::get('/login', function () {
     return view('welcome');
 })->name('login');
 
-Route::post('/login', [AuthController::class, 'login']);
-
-Route::post('/logout', [AuthController::class, 'logout']);
-
+Route::post('/login', [AuthController::class, 'login'])
+    ->middleware('throttle:5,1');
 
 /*
 |--------------------------------------------------------------------------
-| Create Senior
+| Authenticated Area
 |--------------------------------------------------------------------------
 */
 
-Route::get('/add-senior', function () {
-    return view('components.add-senior');
-})->name('seniors.create');
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
 
-Route::post('/senior', [SeniorController::class, 'store'])
-    ->name('seniors.store');
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboard
+    |--------------------------------------------------------------------------
+    */
 
+    Route::get('/dashboard', [SeniorController::class, 'index'])
+        ->name('dashboard');
 
-/*
-|--------------------------------------------------------------------------
-| Global Senior Search
-|--------------------------------------------------------------------------
-*/
+    /*
+    |--------------------------------------------------------------------------
+    | Senior Records
+    |--------------------------------------------------------------------------
+    */
 
-Route::get('/senior-records/search', [SeniorController::class, 'search'])
-    ->name('seniors.search');
+    Route::get('/seniors', [SeniorController::class, 'seniors'])
+        ->name('seniors.senior-records');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Create Senior
+    |--------------------------------------------------------------------------
+    */
 
-/*
-|--------------------------------------------------------------------------
-| View Senior
-|--------------------------------------------------------------------------
-*/
+    Route::get('/add-senior', function () {
+        return view('components.add-senior');
+    })->name('seniors.create');
 
-Route::get('/senior/{senior_id}', [SeniorController::class, 'show'])
-    ->name('seniors.show');
+    Route::post('/senior', [SeniorController::class, 'store'])
+        ->name('seniors.store');
 
+    /*
+    |--------------------------------------------------------------------------
+    | View Senior
+    |--------------------------------------------------------------------------
+    */
 
+    Route::get('/senior/{senior_id}', [SeniorController::class, 'show'])
+        ->name('seniors.show');
 
-/*
-|--------------------------------------------------------------------------
-| Edit Senior
-|--------------------------------------------------------------------------
-*/
+    /*
+    |--------------------------------------------------------------------------
+    | Edit Senior
+    |--------------------------------------------------------------------------
+    */
 
-Route::get('/senior/{senior_id}/edit', [SeniorController::class, 'edit'])
-    ->name('seniors.edit');
+    Route::get('/senior/{senior_id}/edit', [SeniorController::class, 'edit'])
+        ->name('seniors.edit');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Update Senior
+    |--------------------------------------------------------------------------
+    */
 
-/*
-|--------------------------------------------------------------------------
-| Update Senior
-|--------------------------------------------------------------------------
-*/
+    Route::put('/senior/{senior_id}', [SeniorController::class, 'update'])
+        ->name('seniors.update');
 
-Route::put('/senior/{senior_id}', [SeniorController::class, 'update'])
-    ->name('seniors.update');
+    /*
+    |--------------------------------------------------------------------------
+    | Delete Senior
+    |--------------------------------------------------------------------------
+    */
 
+    Route::delete('/senior/{senior_id}', [SeniorController::class, 'destroy'])
+        ->name('seniors.destroy');
 
-/*
-|--------------------------------------------------------------------------
-| Delete Senior
-|--------------------------------------------------------------------------
-*/
+    /*
+    |--------------------------------------------------------------------------
+    | Print Photo (A4)
+    |--------------------------------------------------------------------------
+    */
 
-Route::delete('/senior/{senior_id}', [SeniorController::class, 'destroy'])
-    ->name('seniors.destroy');
+    Route::get('/print/photo', [SeniorController::class, 'printPhoto'])
+        ->name('seniors.print-photo');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Delete Document Attachment
+    |--------------------------------------------------------------------------
+    */
 
-/*
-|--------------------------------------------------------------------------
-| Print Photo (A4)
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/print/photo', [SeniorController::class, 'printPhoto'])
-    ->name('seniors.print-photo');
-
-
-/*
-|--------------------------------------------------------------------------
-| Delete Document Attachment
-|--------------------------------------------------------------------------
-*/
-
-Route::delete('/senior/{senior_id}/document/{field}', [SeniorController::class, 'destroyDocument'])
-    ->whereIn('field', ['photo', 'senior_id_image', 'psa', 'ncsc_form'])
-    ->name('seniors.document.destroy');
+    Route::delete('/senior/{senior_id}/document/{field}', [SeniorController::class, 'destroyDocument'])
+        ->whereIn('field', ['photo', 'senior_id_image', 'psa', 'ncsc_form'])
+        ->name('seniors.document.destroy');
+});

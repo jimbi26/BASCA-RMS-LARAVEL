@@ -32,7 +32,7 @@ class SeniorController
         $femaleCount = $genderCounts['Female'] ?? 0;
 
         // Get 5 newest records
-        $seniors = SeniorCitizen::latest('created_at')
+        $seniors = SeniorCitizen::latest('id')
             ->take(5)
             ->get();
 
@@ -48,20 +48,16 @@ class SeniorController
     public function seniors()
     {
         // Fetch all senior records ordered by newest first
-        $seniors = SeniorCitizen::latest('created_at')->get();
+        $seniors = SeniorCitizen::latest('id')->get();
         // In your Controller
         return view('senior-records', compact('seniors'));
-    }
-
-    // SHOW ADD SENIOR PAGE
-    public function create()
-    {
-        return view('add-senior-modal');
     }
 
     // STORE NEW SENIOR CITIZEN
     public function store(Request $request)
     {
+        $request->validate($this->validationRules());
+
         $data = $request->only([
             'senior_id',
             'rrn',
@@ -119,6 +115,8 @@ class SeniorController
     {
         $senior = SeniorCitizen::where('senior_id', $senior_id)->firstOrFail();
 
+        $request->validate($this->validationRules($senior));
+
         $data = $request->only([
             'senior_id',
             'rrn',
@@ -171,11 +169,17 @@ class SeniorController
 
         $senior->delete();
 
+        // Check where the delete request came from
+        if (url()->previous() === route('dashboard')) {
+            return redirect()
+                ->route('dashboard')
+                ->with('success', 'Senior citizen deleted successfully.');
+        }
+
         return redirect()
             ->route('seniors.senior-records')
             ->with('success', 'Senior citizen deleted successfully.');
     }
-
     public function printPhoto(Request $request)
     {
         $photoUrl = $request->query('url');
@@ -204,5 +208,41 @@ class SeniorController
         $senior->save();
 
         return back()->with('success', ucfirst(str_replace('_', ' ', $field)) . ' deleted successfully.');
+    }
+
+    /**
+     * Shared validation rules for storing and updating senior records.
+     */
+    protected function validationRules(?SeniorCitizen $senior = null): array
+    {
+        $uniqueSeniorId = 'unique:senior_citizens,senior_id';
+        if ($senior) {
+            $uniqueSeniorId .= ',' . $senior->senior_id . ',senior_id';
+        }
+
+        return [
+            'senior_id' => ['required', 'string', 'max:50', $uniqueSeniorId],
+            'rrn' => ['nullable', 'string', 'max:100'],
+            'first_name' => ['required', 'string', 'max:100'],
+            'middle_name' => ['nullable', 'string', 'max:100'],
+            'last_name' => ['required', 'string', 'max:100'],
+            'birth_date' => ['nullable', 'date'],
+            'sex' => ['required', 'in:Male,Female'],
+            'barangay' => ['required', 'string', 'max:100'],
+            'contact_number' => ['required', 'string', 'max:30'],
+            'purok' => ['required', 'string', 'max:50'],
+            'age' => ['nullable', 'integer', 'min:0', 'max:150'],
+            'pension' => ['nullable', 'string', 'max:100'],
+            'philhealth_number' => ['nullable', 'string', 'max:50'],
+            'dependency' => ['nullable', 'string', 'max:100'],
+            'housing' => ['nullable', 'string', 'max:100'],
+            'health_problems' => ['nullable', 'string', 'max:255'],
+            'disability' => ['nullable', 'string', 'max:255'],
+            'medicines' => ['nullable', 'string', 'max:255'],
+            'photo' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:10240'],
+            'senior_id_image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:10240'],
+            'psa' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:10240'],
+            'ncsc_form' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:10240'],
+        ];
     }
 }

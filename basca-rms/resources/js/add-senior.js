@@ -138,22 +138,39 @@ function resetSeniorForm() {
     dobValues.year = "";
 
     const selectedMonth = document.getElementById("selected-month");
-    if (selectedMonth) selectedMonth.textContent = "Month";
+    if (selectedMonth) {
+        selectedMonth.textContent = "Month";
+        selectedMonth.className = "text-slate-800 font-poppins font-bold";
+    }
 
     const selectedDay = document.getElementById("selected-day");
-    if (selectedDay) selectedDay.textContent = "Day";
+    if (selectedDay) {
+        selectedDay.textContent = "Day";
+        selectedDay.className = "text-slate-800 font-poppins font-bold";
+    }
 
     const selectedYear = document.getElementById("selected-year");
-    if (selectedYear) selectedYear.textContent = "Year";
+    if (selectedYear) {
+        selectedYear.textContent = "Year";
+        selectedYear.className = "text-slate-800 font-poppins font-bold";
+    }
 
     const selectedSexText = document.getElementById("selected-sex-text");
-    if (selectedSexText) selectedSexText.textContent = "Select Sex";
+    if (selectedSexText) {
+        selectedSexText.textContent = "Select Sex";
+        selectedSexText.className = "";
+    }
 
     const selectedSexIcon = document.getElementById("selected-sex-icon");
-    if (selectedSexIcon) selectedSexIcon.classList.add("hidden");
+    if (selectedSexIcon) {
+        selectedSexIcon.className = "hidden text-base";
+    }
 
     const selectedBarangay = document.getElementById("selected-barangay");
-    if (selectedBarangay) selectedBarangay.textContent = "Select Barangay";
+    if (selectedBarangay) {
+        selectedBarangay.textContent = "Select Barangay";
+        selectedBarangay.className = "text-slate-800 font-poppins font-bold";
+    }
 
     closeAllDropdowns();
 }

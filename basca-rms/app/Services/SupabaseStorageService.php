@@ -13,9 +13,11 @@ class SupabaseStorageService
 
     public function __construct()
     {
-        $this->url = rtrim(env('SUPABASE_URL'), '/');
-        $this->serviceKey = env('SUPABASE_SERVICE_KEY', '');
-        $this->bucket = env('SUPABASE_BUCKET', 'senior-documents');
+        $config = config('services.supabase', []);
+
+        $this->url = rtrim($config['url'] ?? '', '/');
+        $this->serviceKey = $config['service_key'] ?? '';
+        $this->bucket = $config['bucket'] ?? 'senior-documents';
     }
 
     public function upload(string $filename, string $contents, ?string $mimeType = null): bool
@@ -31,7 +33,6 @@ class SupabaseStorageService
             'apikey' => $this->serviceKey,
             'Authorization' => 'Bearer ' . $this->serviceKey,
         ])->withBody($contents, $mimeType ?: 'application/octet-stream')
-          ->withoutVerifying()
           ->post($endpoint);
 
         if ($response->successful()) {
@@ -58,8 +59,7 @@ class SupabaseStorageService
         $response = Http::withHeaders([
             'apikey' => $this->serviceKey,
             'Authorization' => 'Bearer ' . $this->serviceKey,
-        ])->withoutVerifying()
-          ->delete($endpoint);
+        ])->delete($endpoint);
 
         return $response->successful() || $response->status() === 404;
     }

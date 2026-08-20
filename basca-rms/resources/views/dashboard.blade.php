@@ -40,7 +40,7 @@
                             {{ now()->translatedFormat('l, F j, Y') }}
                         </span>
                         <h1 class="mt-1 font-serif text-3xl font-extrabold tracking-tight sm:text-4xl">
-                            Welcome back, {{ auth()->user()->name ?? 'Admin' }} 👋
+                            Welcome back, {{ auth()->user()->username ?? 'Admin' }} 👋
                         </h1>
                         <p class="mt-1 text-base font-medium text-slate-300">
                             Here's today's snapshot of senior citizen records.
@@ -175,10 +175,10 @@
 
                                                 <!-- Edit Button -->
                                                 <!-- <a href="{{ route('seniors.edit', $senior->senior_id) }}"
-                                                                                                            class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-600 transition-all duration-150 hover:border-[#C69A2E] hover:bg-[#C69A2E] hover:text-white hover:shadow-sm"
-                                                                                                            title="Edit Record">
-                                                                                                            <i class="fa-solid fa-pen-to-square text-base"></i>
-                                                                                                        </a> -->
+                                                                                                                    class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-600 transition-all duration-150 hover:border-[#C69A2E] hover:bg-[#C69A2E] hover:text-white hover:shadow-sm"
+                                                                                                                    title="Edit Record">
+                                                                                                                    <i class="fa-solid fa-pen-to-square text-base"></i>
+                                                                                                                </a> -->
 
                                                 <!-- Delete Button -->
                                                 <button type="button"
@@ -226,8 +226,8 @@
                                             class="{{ $btnAction }} h-8 w-8 text-xs hover:bg-[#14294D] hover:text-white"
                                             title="View"><i class="fa-solid fa-eye"></i></a>
                                         <!-- <a href="{{ route('seniors.edit', $senior->senior_id) }}"
-                                                                                            class="{{ $btnAction }} h-8 w-8 text-xs hover:bg-[#C69A2E] hover:text-white"
-                                                                                            title="Edit"><i class="fa-solid fa-pen-to-square"></i></a> -->
+                                                                                                    class="{{ $btnAction }} h-8 w-8 text-xs hover:bg-[#C69A2E] hover:text-white"
+                                                                                                    title="Edit"><i class="fa-solid fa-pen-to-square"></i></a> -->
                                         <button type="button"
                                             onclick="openDeleteModal('{{ route('seniors.destroy', $senior->senior_id) }}')"
                                             class="{{ $btnAction }} h-8 w-8 text-xs hover:bg-red-600 hover:text-white"
@@ -270,7 +270,6 @@
 
     </div>
 
-    <x-developer-modal />
     <!-- Include your Delete Modal Component Here -->
     @include('components.confirm-delete-modal')
 </body>
